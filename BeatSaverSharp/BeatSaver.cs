@@ -1,6 +1,7 @@
 ﻿using BeatSaverSharp.Http;
 using BeatSaverSharp.Models;
 using BeatSaverSharp.Models.Pages;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -38,6 +39,12 @@ namespace BeatSaverSharp
         {
             _filterProperties = PropertiesForFilter<SearchTextFilterOption>();
             _playlistFilterProperties = PropertiesForFilter<SearchTextPlaylistFilterOptions>();
+
+            // See ReflectionOnlyContractResolver for why this is necessary.
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                ContractResolver = ReflectionOnlyContractResolver.Instance,
+            };
         }
 
         private static (string, PropertyInfo)[] PropertiesForFilter<T>()
